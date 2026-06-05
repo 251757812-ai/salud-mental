@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Salud Mental Estudiantil | CETIS 49</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght=300;400;500;600;700&family=Playfair+Display:wght=600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Librería Chart.js para gráficas dinámicas -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        guinda: {
+                            light: '#9E2A52',
+                            DEFAULT: '#7B1F3F',
+                            dark: '#5C172F',
+                        },
+                        dorado: {
+                            light: '#D4B36A',
+                            DEFAULT: '#C49A45',
+                            dark: '#A6823A',
+                        },
+                        marfil: '#F8F6F0'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #F8F6F0; }
+        ::-webkit-scrollbar-thumb { background: #C49A45; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #A6823A; }
+        input[type="radio"] { accent-color: #7B1F3F; }
+        .breathing-circle { transform-origin: center; }
+    </style>
+</head>
+<body class="bg-marfil text-gray-800 font-sans antialiased flex flex-col min-h-screen pt-20">
+
+    <!-- NAVEGACIÓN PRINCIPAL -->
+    <nav class="bg-white/90 backdrop-blur-md shadow-sm fixed w-full z-50 top-0 transition-all duration-300 border-b border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-guinda/10 flex items-center justify-center">
+                            <i class="fa-solid fa-graduation-cap text-2xl text-guinda"></i>
+                        </div>
+                        <div>
+                            <h1 class="font-serif font-bold text-xl text-guinda leading-none">CETIS 49</h1>
+                            <span class="text-[10px] text-dorado font-bold uppercase tracking-widest">Bienestar Estudiantil</span>
+                        </div>
+                    </div>
+                </div>
+                <!-- Menú de escritorio protegido por contraseña bajo el acceso de "Docentes" -->
+                <div class="hidden md:flex items-center space-x-6">
+                    <a href="#inicio" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm">Inicio</a>
+                    <button onclick="openDocentesPortal()" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm flex items-center gap-1.5 font-bold">
+                        <i class="fa-solid fa-user-tie text-xs"></i> Docentes
+                    </button>
+                    <a href="#calma" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm">Caja de Calma</a>
+                    <a href="#cuestionario" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm">Cuestionario</a>
+                    <a href="#centro-ayuda" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm">Apoyo Local</a>
+                    <a href="#videos" class="text-gray-600 hover:text-guinda font-medium transition-colors text-sm">Videos</a>
+                    <a href="#cuestionario" class="bg-guinda hover:bg-guinda-dark text-white px-5 py-2.5 rounded-full font-medium text-sm transition-all shadow-sm transform hover:-translate-y-0.5">Evalúate ahora</a>
+                </div>
+                <div class="flex items-center md:hidden">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-guinda focus:outline-none p-2 rounded-lg bg-gray-50 transition-colors">
+                        <i class="fa-solid fa-bars text-xl" id="menu-icon"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Menú Móvil -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg transition-all duration-300">
+            <div class="px-4 pt-2 pb-6 space-y-2">
+                <a href="#inicio" class="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all">Inicio</a>
+                <button onclick="openDocentesPortal()" class="block w-full text-left px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all font-bold">
+                    <i class="fa-solid fa-user-tie text-sm mr-2 text-guinda"></i>Portal Docentes
+                </button>
+                <a href="#calma" class="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all">Caja de Calma</a>
+                <a href="#cuestionario" class="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all">Cuestionario</a>
+                <a href="#centro-ayuda" class="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all">Apoyo Local</a>
+                <a href="#videos" class="block px-3 py-2.5 text-base font-medium text-gray-700 hover:text-guinda hover:bg-marfil rounded-xl transition-all">Videos</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- INICIO / HERO SECTION -->
+    <section id="inicio" class="py-12 md:py-20 lg:py-24 px-4 sm:px-6 lg:px-8 relative overflow-hidden flex-grow flex items-center">
+        <div class="absolute top-0 right-0 -mr-20 -mt-20 w-96 h-96 rounded-full bg-dorado/10 blur-3xl z-0 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 -ml-20 -mb-20 w-80 h-80 rounded-full bg-guinda/5 blur-3xl z-0 pointer-events-none"></div>
+        
+        <div class="max-w-7xl mx-auto relative z-10 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+            <div class="text-center md:text-left">
+                <span class="inline-flex items-center gap-2 py-1.5 px-4 rounded-full bg-dorado/20 text-dorado-dark font-semibold text-xs uppercase tracking-wider mb-6 border border-dorado/30">
+                    <span class="w-2 h-2 rounded-full bg-dorado animate-ping"></span>
+                    Tu bienestar importa
+                </span>
+                <h2 class="text-4xl sm:text-5xl lg:text-6xl font-serif font-bold text-gray-900 leading-tight mb-6">
+                    Tu salud mental <br>
+                    <span class="text-guinda relative inline-block">
+                        vale tanto como tus notas.
+                    </span>
+                </h2>
+                <p class="text-base sm:text-lg text-gray-600 mb-8 leading-relaxed max-w-xl mx-auto md:mx-0">
+                    Hola de parte de tu comunidad en el CETIS 49. Este es tu lugar seguro: sin presiones ni juicios. Encuentra herramientas interactivas, orientación y un espacio totalmente confidencial para ti.
+                </p>
+                <div class="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
+                    <a href="#cuestionario" class="bg-guinda hover:bg-guinda-dark text-white px-8 py-4 rounded-full font-medium shadow-md hover:shadow-xl transition-all transform hover:-translate-y-1 text-center">
+                        Hacer Test Confidencial
+                    </a>
+                    <a href="#calma" class="bg-white border-2 border-dorado/40 text-dorado-dark hover:bg-dorado/10 px-8 py-4 rounded-full font-medium transition-all text-center">
+                        Caja de Descompresión
+                    </a>
+                </div>
+            </div>
+            
+            <div class="relative">
+                <div class="bg-white rounded-3xl shadow-xl p-6 sm:p-8 border border-gray-100 flex flex-col justify-between relative overflow-hidden">
+                    <div class="absolute top-0 left-0 w-full h-2 bg-gradient-to-r from-guinda via-dorado to-guinda"></div>
+                    <div>
+                        <div class="flex items-center gap-3 mb-4">
+                            <div class="w-10 h-10 rounded-xl bg-guinda/5 flex items-center justify-center text-guinda">
+                                <i class="fa-solid fa-heart"></i>
+                            </div>
+                            <div>
+                                <h3 class="font-bold text-gray-800">Check-in Emocional</h3>
+                                <p class="text-xs text-gray-400">¿Cómo te sientes en este instante?</p>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-5 gap-2 my-6">
+                            <button onclick="setMood('Excelente', this)" class="mood-btn flex flex-col items-center p-3 rounded-2xl bg-marfil border-2 border-transparent hover:border-dorado transition-all text-2xl group">
+                                <span>😎</span>
+                                <span class="text-[10px] text-gray-500 font-medium mt-1 group-hover:text-gray-800">Genial</span>
+                            </button>
+                            <button onclick="setMood('Bien', this)" class="mood-btn flex flex-col items-center p-3 rounded-2xl bg-marfil border-2 border-transparent hover:border-dorado transition-all text-2xl group">
+                                <span>🙂</span>
+                                <span class="text-[10px] text-gray-500 font-medium mt-1 group-hover:text-gray-800">Bien</span>
+                            </button>
+                            <button onclick="setMood('Neutral', this)" class="mood-btn flex flex-col items-center p-3 rounded-2xl bg-marfil border-2 border-transparent hover:border-dorado transition-all text-2xl group">
+                                <span>😐</span>
+                                <span class="text-[10px] text-gray-500 font-medium mt-1 group-hover:text-gray-800">Neutral</span>
+                            </button>
+                            <button onclick="setMood('Estresado', this)" class="mood-btn flex flex-col items-center p-3 rounded-2xl bg-marfil border-2 border-transparent hover:border-dorado transition-all text-2xl group">
+                                <span>😫</span>
+                                <span class="text-[10px] text-gray-500 font-medium mt-1 group-hover:text-gray-800">Estrés</span>
+                            </button>
+                            <button onclick="setMood('Triste', this)" class="mood-btn flex flex-col items-center p-3 rounded-2xl bg-marfil border-2 border-transparent hover:border-dorado transition-all text-2xl group">
+                                <span>🥺</span>
+                                <span class="text-[10px] text-gray-500 font-medium mt-1 group-hover:text-gray-800">Bajo</span>
+                            </button>
+                        </div>
+                        <div id="mood-feedback" class="text-center text-xs text-guinda font-medium min-h-[16px] bg-guinda/5 py-1 px-3 rounded-lg hidden transition-all"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PORTAL DE DOCENTES PROTEGIDO POR USUARIO Y CONTRASEÑA (MODAL) -->
+    <div id="docentes-modal" class="fixed inset-0 z-[100] hidden bg-marfil overflow-y-auto">
+        <div class="w-full min-h-screen flex flex-col relative">
+            
+            <button onclick="closeDocentesModal()" class="fixed top-4 right-4 text-gray-500 hover:text-white bg-white hover:bg-guinda border border-gray-200 hover:border-guinda p-2.5 rounded-full transition-all z-50 shadow-md">
+                <i class="fa-solid fa-xmark text-lg"></i>
+            </button>
+
+            <div class="p-4 md:p-8 flex-grow max-w-7xl mx-auto w-full">
+                
+                <!-- CONTENEDOR DE LOGIN -->
+                <div id="login-container" class="max-w-md mx-auto my-6">
+                    <div class="bg-marfil rounded-3xl shadow-lg border border-gray-200/60 p-8">
+                        <div class="text-center mb-6">
+                            <div class="w-12 h-12 bg-guinda/10 rounded-full flex items-center justify-center mx-auto mb-4">
+                                <i class="fa-solid fa-lock text-guinda text-xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-serif font-bold text-guinda">Acceso Privado</h2>
+                            <p class="text-gray-500 text-sm mt-2">Introduce tus credenciales para acceder al Portal Docente</p>
+                        </div>
+                        
+                        <form onsubmit="handleLogin(event)">
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold uppercase text-gray-500 tracking-wider mb-2">Usuario Docente</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-user text-gray-400 text-sm"></i>
+                                    </div>
+                                    <input type="text" id="login-username" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-guinda/20 focus:border-guinda outline-none transition-all bg-white text-sm" placeholder="Usuario (docente)">
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-xs font-semibold uppercase text-gray-500 tracking-wider mb-2">Contraseña</label>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-key text-gray-400 text-sm"></i>
+                                    </div>
+                                    <input type="password" id="login-password" required class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 focus:ring-2 focus:ring-guinda/20 focus:border-guinda outline-none transition-all bg-white text-sm" placeholder="Contraseña">
+                                </div>
+                            </div>
+                            
+                            <div id="login-error-msg" class="hidden mb-4 p-3 bg-red-50 text-red-700 text-xs rounded-xl border border-red-100 flex items-center gap-2">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span>Credenciales incorrectas. Intenta con docente / cetis49</span>
+                            </div>
+
+                            <button type="submit" class="w-full bg-guinda hover:bg-guinda-dark text-white font-bold py-3.5 px-4 rounded-xl shadow-md transition-all transform hover:-translate-y-0.5 text-sm uppercase tracking-wider flex justify-center items-center gap-2">
+                                <span>Ingresar al Portal</span>
+                                <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- CONTENEDOR CONTENIDO PRIVADO (Visible solo al autenticarse exitosamente) -->
+                <div id="charts-container" class="hidden">
+                    <div class="bg-white rounded-3xl p-2 md:p-4">
+                        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b border-gray-100 pb-6 mb-4 gap-4">
+                            <div>
+                                <div class="flex items-center gap-2 text-xs text-guinda font-bold uppercase tracking-widest">
+                                    <span class="w-2.5 h-2.5 rounded-full bg-guinda animate-pulse"></span>
+                                    Portal Docente Autorizado
+                                </div>
+                                <h2 class="text-3xl font-serif font-bold text-gray-900 mt-1">Acompañamiento y Diagnóstico Escolar</h2>
+                                <p class="text-gray-500 text-xs mt-1">Herramientas e informes del Plantel CETIS 49</p>
+                            </div>
+                            <button onclick="handleLogout()" class="px-4 py-2 border-2 border-guinda text-guinda hover:bg-guinda hover:text-white rounded-xl transition-all text-xs font-bold flex items-center gap-2">
+                                <i class="fa-solid fa-lock-open"></i>
+                                Cerrar Sesión
+                            </button>
+                        </div>
+
+                        <!-- Sub-Navegación del Portal Docente -->
+                        <div class="flex overflow-x-auto gap-2 pb-2 mb-6 scrollbar-hide border-b border-gray-100" id="portal-sub-tabs">
+                            <button onclick="switchPortalSection('estadisticas')" id="btn-sub-estadisticas" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-guinda bg-guinda text-white">
+                                <i class="fa-solid fa-chart-line mr-1.5"></i> Estadísticas y Dashboards
+                            </button>
+                            <button onclick="switchPortalSection('guias')" id="btn-sub-guias" class="px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-gray-200 text-gray-500 hover:border-guinda/50 hover:text-guinda bg-white">
+                                <i class="fa-solid fa-chalkboard-user mr-1.5"></i> Guías Psicoeducativas
+                            </button>
+                        </div>
+
+                        <!-- SECCIÓN 1: ESTADÍSTICAS -->
+                        <div id="portal-section-estadisticas" class="space-y-6">
+
+                            <!-- Encabezado / Totalizadores rápidos -->
+                            <header class="bg-gradient-to-r from-guinda-dark via-guinda to-guinda-light text-white rounded-3xl p-6 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center relative overflow-hidden gap-6">
+                                <div class="absolute -right-10 -bottom-10 opacity-10"><i class="fa-solid fa-chart-line text-9xl"></i></div>
+                                <div class="relative z-10">
+                                    <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-white/20 text-white font-semibold text-xs uppercase tracking-wider mb-3 backdrop-blur-sm border border-white/10">
+                                        <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+                                        Base de Datos en Tiempo Real · CETIS 49
+                                    </span>
+                                    <h2 class="text-2xl md:text-3xl font-serif font-bold tracking-wide">Tablero de Análisis Estadístico</h2>
+                                    <p class="text-dorado-light text-sm font-medium opacity-90 mt-1">Datos conectados con Google Forms — <span id="realtime-status" class="text-yellow-400 font-bold">Cargando...</span></p>
+                                </div>
+                                <div class="flex flex-wrap gap-3 z-10 w-full md:w-auto">
+                                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3 flex-grow md:flex-none">
+                                        <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-graduation-cap"></i></div>
+                                        <div><span class="text-[10px] uppercase font-bold text-white/70 block">Respuestas</span><span id="kpi-total" class="text-xl font-bold leading-none">—</span></div>
+                                    </div>
+                                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3 flex-grow md:flex-none">
+                                        <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-venus"></i></div>
+                                        <div><span class="text-[10px] uppercase font-bold text-white/70 block">Mujeres</span><span id="kpi-fem" class="text-xl font-bold leading-none">—</span></div>
+                                    </div>
+                                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3 flex-grow md:flex-none">
+                                        <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-mars"></i></div>
+                                        <div><span class="text-[10px] uppercase font-bold text-white/70 block">Hombres</span><span id="kpi-masc" class="text-xl font-bold leading-none">—</span></div>
+                                    </div>
+                                    <div class="bg-white/10 backdrop-blur-md px-4 py-3 rounded-2xl border border-white/10 flex items-center gap-3 flex-grow md:flex-none">
+                                        <div class="w-10 h-10 bg-white/15 rounded-xl flex items-center justify-center text-white"><i class="fa-solid fa-rotate"></i></div>
+                                        <div><span class="text-[10px] uppercase font-bold text-white/70 block">Actualizar</span><button onclick="cargarRespuestasReales()" class="text-xs font-bold text-white hover:text-dorado transition-colors mt-0.5">↺ Ahora</button></div>
+                                    </div>
+                                </div>
+                            </header>
+
+                            <!-- Panel de Filtro de Especialidad y Semestre -->
+                            <div class="bg-marfil rounded-3xl p-6 border border-gray-100 flex flex-col gap-6">
+                                <div>
+                                    <h3 class="text-lg font-bold text-gray-800 flex items-center mb-4">
+                                        <span class="bg-guinda text-white w-7 h-7 rounded-full flex items-center justify-center text-xs mr-2.5 shadow-md">1</span>
+                                        Selecciona una Especialidad para el Análisis
+                                    </h3>
+                                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                                        <button onclick="docSeleccionarCarrera('Cosmetología')" id="doc-btn-Cosmetología" class="doc-carrera-btn group flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-gray-100 bg-white hover:border-dorado hover:bg-dorado/5 hover:shadow-md transition-all">
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 shadow-sm flex items-center justify-center mb-2 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-dorado doc-icon-container"><i class="fa-solid fa-spa text-lg"></i></div>
+                                            <span class="font-semibold text-gray-600 group-hover:text-guinda text-center transition-colors text-xs">Cosmetología (74)</span>
+                                        </button>
+                                        <button onclick="docSeleccionarCarrera('Programación')" id="doc-btn-Programación" class="doc-carrera-btn group flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-gray-100 bg-white hover:border-dorado hover:bg-dorado/5 hover:shadow-md transition-all">
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 shadow-sm flex items-center justify-center mb-2 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-dorado doc-icon-container"><i class="fa-solid fa-laptop-code text-lg"></i></div>
+                                            <span class="font-semibold text-gray-600 group-hover:text-guinda text-center transition-colors text-xs">Programación (73)</span>
+                                        </button>
+                                        <button onclick="docSeleccionarCarrera('Diseño gráfico')" id="doc-btn-Diseño-gráfico" class="doc-carrera-btn group flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-gray-100 bg-white hover:border-dorado hover:bg-dorado/5 hover:shadow-md transition-all">
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 shadow-sm flex items-center justify-center mb-2 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-dorado doc-icon-container"><i class="fa-solid fa-palette text-lg"></i></div>
+                                            <span class="font-semibold text-gray-600 group-hover:text-guinda text-center transition-colors text-xs">Diseño Gráfico (24)</span>
+                                        </button>
+                                        <button onclick="docSeleccionarCarrera('Medios de comunicación')" id="doc-btn-Medios-de-comunicación" class="doc-carrera-btn group flex flex-col items-center justify-center p-4 rounded-2xl border-2 border-gray-100 bg-white hover:border-dorado hover:bg-dorado/5 hover:shadow-md transition-all">
+                                            <div class="w-10 h-10 rounded-full bg-gray-50 shadow-sm flex items-center justify-center mb-2 group-hover:scale-110 transition-transform text-gray-400 group-hover:text-dorado doc-icon-container"><i class="fa-solid fa-microphone-lines text-lg"></i></div>
+                                            <span class="font-semibold text-gray-600 group-hover:text-guinda text-center transition-colors text-xs">Medios de Com. (22)</span>
+                                        </button>
+                                    </div>
+                                </div>
+                                <!-- Selector de Semestres -->
+                                <div id="doc-seccion-semestres" class="hidden border-t border-gray-100 pt-5">
+                                    <h3 class="text-lg font-bold text-gray-800 flex items-center mb-4">
+                                        <span class="bg-guinda text-white w-7 h-7 rounded-full flex items-center justify-center text-xs mr-2.5 shadow-md">2</span>
+                                        Selecciona un Semestre de <span id="doc-label-carrera" class="text-dorado ml-1.5 font-serif italic"></span>
+                                    </h3>
+                                    <div id="doc-contenedor-semestres" class="flex flex-wrap gap-3"></div>
+                                </div>
+                            </div>
+
+                            <!-- Dashboard Principal de Gráficas -->
+                            <div id="doc-dashboard-graficas" class="hidden space-y-6">
+                                <!-- Barra de control -->
+                                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white p-4 rounded-2xl shadow-sm border border-gray-100 gap-4">
+                                    <div class="flex items-center gap-3">
+                                        <button onclick="docRegresarSeleccion()" class="bg-gray-50 hover:bg-guinda hover:text-white text-gray-600 w-9 h-9 rounded-full flex items-center justify-center shadow-sm border border-gray-200 transition-all group">
+                                            <i class="fa-solid fa-arrow-left group-hover:-translate-x-1 transition-transform"></i>
+                                        </button>
+                                        <div>
+                                            <span class="text-xs font-bold text-dorado uppercase tracking-wider">Visualización de Grupo</span>
+                                            <h3 id="doc-grupo-titulo" class="text-lg font-serif font-bold text-guinda"></h3>
+                                        </div>
+                                    </div>
+                                    <div class="bg-guinda/5 border border-guinda/10 rounded-xl px-4 py-2 flex items-center gap-2">
+                                        <span class="text-xs font-semibold text-gray-500">Muestra analizada:</span>
+                                        <strong class="text-base font-bold text-guinda" id="doc-kpi-muestra">0 Estudiantes</strong>
+                                    </div>
+                                </div>
+
+                                <!-- Gráficas Radar / Barras / Dona -->
+                                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                                        <div class="text-center mb-3 border-b border-gray-50 pb-3">
+                                            <h4 class="font-bold text-gray-800 flex justify-center items-center gap-1.5"><i class="fa-solid fa-chart-radar text-guinda"></i> Perfil Clínico</h4>
+                                            <p class="text-[11px] text-gray-400 mt-0.5">Áreas promedio de afectación de salud mental</p>
+                                        </div>
+                                        <div class="h-56 flex items-center justify-center"><canvas id="doc-radarChart"></canvas></div>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                                        <div class="text-center mb-3 border-b border-gray-50 pb-3">
+                                            <h4 class="font-bold text-gray-800 flex justify-center items-center gap-1.5"><i class="fa-solid fa-chart-simple text-dorado"></i> Casos por Gravedad</h4>
+                                            <p class="text-[11px] text-gray-400 mt-0.5">Distribución absoluta por estado de riesgo</p>
+                                        </div>
+                                        <div class="h-56 flex items-center justify-center"><canvas id="doc-barChart"></canvas></div>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex flex-col">
+                                        <div class="text-center mb-3 border-b border-gray-50 pb-3">
+                                            <h4 class="font-bold text-gray-800 flex justify-center items-center gap-1.5"><i class="fa-solid fa-chart-pie text-guinda"></i> Proporción de Sexo</h4>
+                                            <p class="text-[11px] text-gray-400 mt-0.5">Distribución porcentual por género</p>
+                                        </div>
+                                        <div class="h-56 flex items-center justify-center"><canvas id="doc-pieChart"></canvas></div>
+                                    </div>
+                                </div>
+
+                                <!-- Diagnóstico Clínico -->
+                                <div class="bg-gradient-to-br from-guinda-dark to-guinda text-white rounded-3xl p-6 shadow-lg border border-guinda/20 relative overflow-hidden">
+                                    <div class="absolute -right-8 -bottom-8 opacity-10"><i class="fa-solid fa-notes-medical text-9xl"></i></div>
+                                    <div class="relative z-10">
+                                        <span class="inline-flex items-center gap-1.5 py-1 px-3 rounded-full bg-white/20 text-dorado-light font-bold text-[10px] uppercase tracking-wider mb-3">
+                                            <i class="fa-solid fa-stethoscope"></i> Diagnóstico y Detonantes del Grupo
+                                        </span>
+                                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-2">
+                                            <div>
+                                                <h4 class="text-xs font-bold uppercase tracking-wider text-dorado-light mb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-face-frown"></i> ¿De qué sufren principalmente?</h4>
+                                                <p id="doc-diag-sufren" class="text-sm leading-relaxed font-semibold">Selecciona una especialidad y semestre para cargar el diagnóstico...</p>
+                                            </div>
+                                            <div class="border-t md:border-t-0 md:border-l border-white/15 pt-4 md:pt-0 md:pl-6">
+                                                <h4 class="text-xs font-bold uppercase tracking-wider text-dorado-light mb-1.5 flex items-center gap-1.5"><i class="fa-solid fa-circle-question"></i> ¿Cuáles son las causas asociadas?</h4>
+                                                <p id="doc-diag-porque" class="text-sm leading-relaxed text-white/90">Selecciona una especialidad y semestre para visualizar detonantes...</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Tabla Resumen -->
+                                <div class="bg-white rounded-2xl p-5 border border-gray-100 shadow-sm">
+                                    <h4 class="text-base font-bold text-gray-800 mb-4 flex items-center gap-2"><i class="fa-solid fa-table-list text-guinda"></i> Desglose Numérico del Tamizaje</h4>
+                                    <div class="overflow-x-auto rounded-xl border border-gray-100">
+                                        <table class="w-full text-left border-collapse">
+                                            <thead><tr class="bg-gray-50 text-gray-500 text-xs uppercase font-bold tracking-wider">
+                                                <th class="p-3 border-b">Femenino</th>
+                                                <th class="p-3 border-b">Masculino</th>
+                                                <th class="p-3 border-b">Casos Sanos/Leves</th>
+                                                <th class="p-3 border-b">Casos Moderados</th>
+                                                <th class="p-3 border-b">Casos en Alerta</th>
+                                            </tr></thead>
+                                            <tbody class="text-sm font-medium text-gray-700"><tr class="hover:bg-marfil/30">
+                                                <td class="p-3 border-b" id="doc-td-fem">-</td>
+                                                <td class="p-3 border-b" id="doc-td-mas">-</td>
+                                                <td class="p-3 border-b text-green-600" id="doc-td-leves">-</td>
+                                                <td class="p-3 border-b text-yellow-600" id="doc-td-mod">-</td>
+                                                <td class="p-3 border-b text-red-600" id="doc-td-graves">-</td>
+                                            </tr></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <!-- Recomendaciones + Canalización + Videos -->
+                                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                                    <div class="bg-white rounded-2xl p-6 border border-gray-100 shadow-sm">
+                                        <h4 class="text-base font-bold text-gray-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-lightbulb text-dorado"></i> Plan de Acción y Recomendaciones</h4>
+                                        <p class="text-xs text-gray-400 mb-4">Sugerencias pedagógicas de contención inmediata para el aula</p>
+                                        <ul id="doc-contenedor-recomendaciones" class="space-y-3 text-sm text-gray-600"></ul>
+                                    </div>
+                                    <div class="space-y-5">
+                                        <div class="bg-red-50/50 rounded-2xl p-5 border border-red-100 shadow-sm">
+                                            <h4 class="text-base font-bold text-red-800 mb-2 flex items-center gap-2"><i class="fa-solid fa-hospital-user text-red-600"></i> Protocolo de Canalización</h4>
+                                            <p class="text-xs text-red-700/70 mb-4">Rutas de derivación sugeridas para casos en riesgo</p>
+                                            <div id="doc-contenedor-canalizacion" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                                        </div>
+                                        <div class="bg-gray-900 rounded-2xl p-5 shadow-sm text-white">
+                                            <h4 class="text-base font-bold text-dorado mb-1 flex items-center gap-2"><i class="fa-brands fa-youtube text-red-500"></i> Botiquín Digital de Apoyo</h4>
+                                            <p class="text-xs text-gray-400 mb-4 pb-3 border-b border-gray-800">Recursos audiovisuales para tutoría</p>
+                                            <div id="doc-contenedor-videos" class="grid grid-cols-1 sm:grid-cols-2 gap-3"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- SECCIÓN 2: GUIAS Y MATERIAL DE APOYO DOCENTE -->
+                        <div id="portal-section-guias" class="hidden grid grid-cols-1 md:grid-cols-2 gap-8 pt-4">
+                            <!-- Tarjeta 1: Señales en el Aula -->
+                            <div class="bg-marfil rounded-2xl p-6 border border-gray-100 flex flex-col">
+                                <div class="w-12 h-12 bg-guinda/10 rounded-xl flex items-center justify-center text-guinda text-xl mb-4">
+                                    <i class="fa-solid fa-eye"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">Identificar Focos Rojos</h3>
+                                <p class="text-gray-600 text-xs leading-relaxed mb-4">
+                                    Observa con atención cambios repentinos de conducta en el aula:
+                                </p>
+                                <ul class="text-xs text-gray-600 space-y-2 list-disc pl-4 leading-relaxed">
+                                    <li>Ausentismo o retrasos constantes no justificados previamente.</li>
+                                    <li>Baja drástica en la calidad de entregas de actividades y participación en proyectos.</li>
+                                    <li>Irritabilidad, aislamiento de compañeros o desgano marcado continuo.</li>
+                                    <li>Signos visibles de fatiga crónica o somnolencia durante las clases académicas.</li>
+                                </ul>
+                            </div>
+
+                            <!-- Tarjeta 2: Plan de Acción -->
+                            <div class="bg-marfil rounded-2xl p-6 border border-gray-100 flex flex-col">
+                                <div class="w-12 h-12 bg-dorado/20 rounded-xl flex items-center justify-center text-dorado-dark text-xl mb-4">
+                                    <i class="fa-solid fa-comments"></i>
+                                </div>
+                                <h3 class="text-lg font-bold text-gray-900 mb-2">¿Cómo Actuar frente al Estrés Escolar?</h3>
+                                <p class="text-gray-600 text-xs leading-relaxed mb-4">
+                                    Aplica estrategias constructivas de contención y apoyo pedagógico:
+                                </p>
+                                <ul class="text-xs text-gray-600 space-y-2 list-disc pl-4 leading-relaxed">
+                                    <li>Escucha activa al estudiante en privado, mostrando interés sincero y sin emitir juicios.</li>
+                                    <li>Brindar flexibilidad de tiempos de entrega tras confirmarse periodos severos de afectación emocional.</li>
+                                    <li>Coordinar y canalizar al estudiante con el área de Orientación Educativa del plantel de forma discreta.</li>
+                                </ul>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CAJA DE CALMA -->
+    <section id="calma" class="py-16 bg-white border-y border-gray-100">
+        <div class="max-w-4xl mx-auto px-4 text-center">
+            <span class="text-xs text-dorado font-bold uppercase tracking-widest bg-dorado/10 px-3 py-1 rounded-full">Zona de Descompresión</span>
+            <h2 class="text-3xl font-serif font-bold text-gray-900 mt-3 mb-2">Caja de Calma Interactiva</h2>
+            <p class="text-gray-500 max-w-md mx-auto text-sm mb-8">Si sientes tensión, date un minuto. Sigue el ritmo visual del círculo con la técnica 4-7-8.</p>
+            
+            <div class="bg-marfil rounded-3xl p-8 max-w-md mx-auto shadow-inner flex flex-col items-center border border-gray-100">
+                <div class="w-48 h-48 rounded-full border-4 border-dorado/20 flex items-center justify-center relative mb-6 overflow-visible">
+                    <div id="breath-circle" class="breathing-circle w-20 h-20 rounded-full bg-guinda/20 border-2 border-guinda flex items-center justify-center transform scale-100">
+                        <i class="fa-solid fa-wind text-2xl text-guinda"></i>
+                    </div>
+                </div>
+                <h4 id="breath-instruction" class="text-lg font-bold text-gray-800 min-h-[28px]">¿Listo para relajarte?</h4>
+                <p id="breath-timer" class="text-xs text-gray-400 mt-1 uppercase font-semibold tracking-wider">Presiona iniciar</p>
+                <button onclick="toggleBreathing(this)" class="mt-6 bg-guinda text-white px-6 py-2.5 rounded-full font-medium text-sm transition-colors hover:bg-guinda-dark shadow-md">
+                    Iniciar Guía
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CUESTIONARIO ESTUDIANTIL -->
+    <section id="cuestionario" class="py-16 md:py-24 bg-marfil relative">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-10">
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-guinda mb-3">Descubre tu Estado Emocional</h2>
+                <p class="text-gray-600 max-w-xl mx-auto text-sm sm:text-base">Responde con honestidad de forma 100% anónima. Al final, el sistema analizará tus respuestas para darte un consejo y actualizará nuestras estadísticas generales de forma segura.</p>
+            </div>
+
+            <div class="bg-white rounded-3xl shadow-lg border border-gray-100 p-6 md:p-10" id="form-container">
+                <iframe src="https://docs.google.com/forms/d/e/1FAIpQLSfowsae0FwmDxiHNnhrHbrakYIq6uZqr4JUVCpFUuYa7xfZUA/viewform?embedded=true" width="640" height="900" frameborder="0" marginheight="0" marginwidth="0" style="width:100%;max-width:640px;min-height:900px;display:block;margin:0 auto;border-radius:1rem;overflow:hidden;">Cargando…</iframe>
+            </div>
+        </div>
+    </section>
+
+    <!-- APOYO LOCAL -->
+    <section id="centro-ayuda" class="py-16 md:py-24 bg-white border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-xs text-dorado font-bold tracking-widest uppercase bg-dorado/10 px-3 py-1 rounded-full">Red de Apoyo Local</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-guinda mt-3 mb-3">Centros de Atención Cerca de Ti</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                <div class="bg-marfil rounded-2xl shadow-sm p-6 border border-gray-100 flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                    <div>
+                        <div class="w-12 h-12 bg-dorado/10 rounded-xl flex items-center justify-center mb-4"><i class="fa-solid fa-house-medical text-xl text-dorado-dark"></i></div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">CECOSAM Xochimilco</h3>
+                        <p class="text-xs text-gray-600 mb-4">Especialistas en psicología pública para adolescentes.</p>
+                    </div>
+                    <div class="border-t border-gray-200/60 pt-4">
+                        <a href="https://www.google.com/maps/search/?api=1&query=CECOSAM+Xochimilco+CDMX" target="_blank" class="w-full block text-center bg-white border-2 border-guinda/20 text-guinda hover:bg-guinda hover:text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm shadow-sm">Ver en Google Maps</a>
+                    </div>
+                </div>
+                <div class="bg-marfil rounded-2xl shadow-sm p-6 border border-gray-100 flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                    <div>
+                        <div class="w-12 h-12 bg-guinda/5 rounded-xl flex items-center justify-center mb-4"><i class="fa-solid fa-hospital-user text-xl text-guinda"></i></div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Hosp. Psiquiátrico Infantil</h3>
+                        <p class="text-xs text-gray-600 mb-4">Urgencias 24h. Cercano a Xochimilco.</p>
+                    </div>
+                    <div class="border-t border-gray-200/60 pt-4">
+                        <a href="https://www.google.com/maps/search/?api=1&query=Hospital+Psiquiatrico+Infantil+Juan+N+Navarro+Tlalpan" target="_blank" class="w-full block text-center bg-white border-2 border-guinda/20 text-guinda hover:bg-guinda hover:text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm shadow-sm">Ver en Google Maps</a>
+                    </div>
+                </div>
+                <div class="bg-marfil rounded-2xl shadow-sm p-6 border border-gray-100 flex flex-col justify-between hover:-translate-y-1 transition-transform">
+                    <div>
+                        <div class="w-12 h-12 bg-dorado/10 rounded-xl flex items-center justify-center mb-4"><i class="fa-solid fa-users text-xl text-dorado-dark"></i></div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">UNEME CAPA Xochimilco</h3>
+                        <p class="text-xs text-gray-600 mb-4">Prevención de adicciones, ansiedad y problemas familiares.</p>
+                    </div>
+                    <div class="border-t border-gray-200/60 pt-4">
+                        <a href="https://www.google.com/maps/search/?api=1&query=UNEME+CAPA+Xochimilco" target="_blank" class="w-full block text-center bg-white border-2 border-guinda/20 text-guinda hover:bg-guinda hover:text-white font-bold py-2 px-4 rounded-xl transition-colors text-sm shadow-sm">Ver en Google Maps</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- VIDEOS RECOMENDADOS -->
+    <section id="videos" class="py-16 md:py-24 bg-marfil border-y border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <span class="text-xs text-dorado font-bold tracking-widest uppercase bg-dorado/10 px-3 py-1 rounded-full">Recursos Multimedia</span>
+                <h2 class="text-3xl md:text-4xl font-serif font-bold text-guinda mt-3 mb-3">Videos y Consejos para Ti</h2>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 text-xl mb-4">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">¿Cómo manejar el estrés académico?</h3>
+                        <p class="text-xs text-gray-500 mb-4">Aprende técnicas sencillas de estudio inteligente y manejo de la ansiedad escolar.</p>
+                    </div>
+                    <div class="border-t border-gray-200/60 pt-4">
+                        <a href="https://www.youtube.com/results?search_query=como+manejar+estres+academico+estudiantes" target="_blank" class="w-full block text-center bg-guinda text-white hover:bg-guinda-dark font-bold py-2.5 px-4 rounded-xl transition-colors text-sm shadow-sm">Buscar Videos Relacionados</a>
+                    </div>
+                </div>
+                <div class="bg-white rounded-3xl p-6 border border-gray-100 shadow-sm flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 bg-red-100 rounded-xl flex items-center justify-center text-red-600 text-xl mb-4">
+                            <i class="fa-brands fa-youtube"></i>
+                        </div>
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Hábitos de bienestar diario</h3>
+                        <p class="text-xs text-gray-500 mb-4">Rutinas diarias rápidas de meditación y autocuidado emocional para adolescentes.</p>
+                    </div>
+                    <div class="border-t border-gray-200/60 pt-4">
+                        <a href="https://www.youtube.com/results?search_query=habitos+saludables+salud+mental+adolescentes" target="_blank" class="w-full block text-center bg-guinda text-white hover:bg-guinda-dark font-bold py-2.5 px-4 rounded-xl transition-colors text-sm shadow-sm">Buscar Videos Relacionados</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- PIE DE PÁGINA -->
+    <footer class="bg-gray-950 text-gray-400 py-12 border-t-4 border-guinda">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-xs text-gray-600">© <span id="year"></span> CETIS 49 - Portal Informativo de Acompañamiento Emocional Estudiantil.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // Control de Estado de Autenticación
+        let isDocenteAuthenticated = false;
+        let intervaloActualizacion = null;
+
+        // ====== CONTROL DE MODAL PORTAL DOCENTES ======
+        function openDocentesPortal() {
+            document.getElementById('docentes-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            document.getElementById('docentes-modal').scrollTop = 0;
+            // Si el menú móvil está abierto, cerrarlo
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+                document.getElementById('menu-icon').className = "fa-solid fa-bars text-xl";
+            }
+
+            // Si ya está logueado anteriormente, mostrar el contenido directo
+            if (isDocenteAuthenticated) {
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('charts-container').classList.remove('hidden');
+            } else {
+                document.getElementById('login-container').classList.remove('hidden');
+                document.getElementById('charts-container').classList.add('hidden');
+            }
+        }
+
+        function closeDocentesModal() {
+            document.getElementById('docentes-modal').classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Sub-pestañas internas del portal docente (Estadísticas / Guías)
+        function switchPortalSection(section) {
+            const btnEstadisticas = document.getElementById('btn-sub-estadisticas');
+            const btnGuias = document.getElementById('btn-sub-guias');
+            const secEstadisticas = document.getElementById('portal-section-estadisticas');
+            const secGuias = document.getElementById('portal-section-guias');
+
+            if (section === 'estadisticas') {
+                btnEstadisticas.className = "px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-guinda bg-guinda text-white";
+                btnGuias.className = "px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-gray-200 text-gray-500 hover:border-guinda/50 hover:text-guinda bg-white";
+                secEstadisticas.classList.remove('hidden');
+                secGuias.classList.add('hidden');
+                
+            } else {
+                btnGuias.className = "px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-guinda bg-guinda text-white";
+                btnEstadisticas.className = "px-5 py-2.5 rounded-full text-sm font-bold whitespace-nowrap transition-all border-2 border-gray-200 text-gray-500 hover:border-guinda/50 hover:text-guinda bg-white";
+                secGuias.classList.remove('hidden');
+                secEstadisticas.classList.add('hidden');
+            }
+        }
+
+        // MENÚ MÓVIL
+        const menuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        if(menuBtn) {
+            menuBtn.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+                menuIcon.className = mobileMenu.classList.contains('hidden') ? "fa-solid fa-bars text-xl" : "fa-solid fa-xmark text-xl";
+            });
+        }
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+                menuIcon.className = "fa-solid fa-bars text-xl";
+            });
+        });
+
+        // ====== CONEXIÓN EN TIEMPO REAL CON GOOGLE SHEETS ======
+        const SHEETS_API_URL = "https://script.google.com/macros/s/AKfycbye87Cqpiz11blpb2BXwIHnxVbrJZ1DLOHSP02BkGEOveefjmV7wJaZy-4TfVWgzVuxPQ/exec";
+        let respuestasReales = [];
+
+        async function cargarRespuestasReales() {
+            const indicador = document.getElementById('realtime-status');
+            if (indicador) { indicador.textContent = 'Sincronizando...'; indicador.className = 'text-yellow-400 text-xs font-bold animate-pulse'; }
+            try {
+                const res = await fetch(SHEETS_API_URL + '?t=' + Date.now());
+                const datos = await res.json();
+                respuestasReales = Array.isArray(datos) ? datos.filter(r => r["Sexo:"] && r["Carrera:"] && r["Semestre:"]) : [];
+                actualizarKPIsGlobales();
+                if (docCarreraActual && docSemestreActual) docCargarDashboard(docSemestreActual);
+                else if (docCarreraActual) docSeleccionarCarrera(docCarreraActual);
+                if (indicador) { indicador.textContent = '● En vivo — ' + new Date().toLocaleTimeString('es-MX', {hour:'2-digit',minute:'2-digit'}); indicador.className = 'text-green-400 text-xs font-bold'; }
+            } catch(e) {
+                console.warn("Error al conectar con Google Sheets:", e);
+                if (indicador) { indicador.textContent = '⚠ Sin conexión'; indicador.className = 'text-red-400 text-xs font-bold'; }
+            }
+        }
+
+        function actualizarKPIsGlobales() {
+            const total = respuestasReales.length;
+            const fem = respuestasReales.filter(r => normalizar(r["Sexo:"]) === "femenino").length;
+            const masc = total - fem;
+            const elTotal = document.getElementById('kpi-total');
+            const elFem = document.getElementById('kpi-fem');
+            const elMasc = document.getElementById('kpi-masc');
+            if (elTotal) elTotal.textContent = total;
+            if (elFem) elFem.textContent = fem;
+            if (elMasc) elMasc.textContent = masc;
+            const carreras = ["Cosmetología","Programación","Diseño gráfico","Medios de comunicación"];
+            carreras.forEach(c => {
+                const count = respuestasReales.filter(r => normalizar(r["Carrera:"]) === normalizar(c)).length;
+                const id = `doc-btn-${c.replace(/\s+/g, '-')}`;
+                const btn = document.getElementById(id);
+                if (btn) { const sp = btn.querySelector('span'); if (sp) sp.textContent = `${c} (${count})`; }
+            });
+        }
+
+        function normalizar(str) {
+            if (!str) return '';
+            return str.toString().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").trim();
+        }
+
+        function filtrarPorCarreraYSemestre(carrera, semestre) {
+            return respuestasReales.filter(r =>
+                normalizar(r["Carrera:"]) === normalizar(carrera) &&
+                normalizar(r["Semestre:"]).replace(/[°oº]/g,'').trim() === semestre.toString().replace(/[°oº]/g,'').trim()
+            );
+        }
+
+        // ====== BASE DE DATOS ESTÁTICA DE DIAGNÓSTICOS (contenido cualitativo) ======
+        const docBaseDatos = {
+            "Cosmetología": {
+                "total": 74,
+                "semestres": {
+                    "2": { "total_grupo": 53, "sexo": { "Femenino": 49, "Masculino": 4 }, "gravedad": { "Sanos/Leves": 44, "Moderados": 7, "Graves": 2 }, "radar_clinico": [68, 55, 42, 60, 25], "diagnostico": { "sufren": "Estrés escolar moderado a alto, desregulación en la higiene del sueño y un alto nivel de ansiedad situacional o anticipatoria.", "porque": "Se asocia de manera directa con la tensión por el inicio de sus primeras prácticas de laboratorio reales en rostros y cabello, la presión financiera para adquirir kits de belleza de grado profesional y un fuerte pánico escénico a ser evaluadas en público en técnicas manuales de precisión." }, "recomendaciones": ["Planificar calendarios de adquisición de materiales con anticipación para aminorar el estrés financiero.", "Realizar breves dinámicas de estiramiento muscular previo a las jornadas prácticas de laboratorio.", "Fomentar foros de dudas para disminuir el pánico antes de evaluaciones prácticas manuales."], "canalizacion": [{ "institucion": "CECOSAM Xochimilco", "motivo": "Ansiedad y apoyo psicológico", "maps": "CECOSAM+Xochimilco+CDMX" }, { "institucion": "Orientación CETIS 49", "motivo": "Primer filtro y tutoría académica", "maps": "CETIS+49" }], "videos": [{ "titulo": "Manejo del Estrés en el Aula", "url": "https://www.youtube.com/results?search_query=tecnicas+de+relajacion+ansiedad" }, { "titulo": "Pausas Activas de Relajación", "url": "https://www.youtube.com/results?search_query=pausas+activas" }] },
+                    "6": { "total_grupo": 21, "sexo": { "Femenino": 18, "Masculino": 3 }, "gravedad": { "Sanos/Leves": 14, "Moderados": 5, "Graves": 2 }, "radar_clinico": [84, 72, 55, 78, 38], "diagnostico": { "sufren": "Agotamiento emocional agudo (Síndrome de Burnout académico), insomnio secundario persistente y desánimo transitorio.", "porque": "Detonado por la alta carga física y mental al liberar de manera simultánea su servicio social y sus prácticas profesionales obligatorias, sumado al estrés por costear el portafolio final integrador de cosmetología avanzada y la incertidumbre existencial sobre la inserción laboral." }, "recomendaciones": ["Ofrecer talleres informales de preparación de currículum y marca personal para mitigar el temor al egreso.", "Negociar fechas flexibles para evitar saturación de portafolios teóricos en la última jornada de evaluación.", "Inculcar la práctica diaria del autocuidado personal como pilar del desempeño profesional."], "canalizacion": [{ "institucion": "UNEME-CISAME", "motivo": "Evaluaciones psicosociales profundas", "maps": "CISAME+CDMX" }, { "institucion": "Línea de la Vida", "motivo": "Consulta emocional nacional (800 911 2000)", "maps": "Salud+Mental+Mexico" }], "videos": [{ "titulo": "Síndrome de Burnout Escolar", "url": "https://www.youtube.com/results?search_query=sindrome+de+burnout" }, { "titulo": "Ansiedad por el Futuro Laboral", "url": "https://www.youtube.com/results?search_query=ansiedad+por+el+futuro+jovenes" }] }
+                }
+            },
+            "Programación": {
+                "total": 73,
+                "semestres": {
+                    "2": { "total_grupo": 30, "sexo": { "Femenino": 7, "Masculino": 23 }, "gravedad": { "Sanos/Leves": 21, "Moderados": 7, "Graves": 2 }, "radar_clinico": [75, 68, 52, 65, 48], "diagnostico": { "sufren": "Frustración severa ante el error, episodios de Síndrome del Impostor y aislamiento social o retraimiento reactivo.", "porque": "Es consecuencia del choque intelectual con la lógica abstracta y la rigurosa sintaxis que exige la codificación, exacerbado por el mal hábito de pasar demasiadas horas consecutivas de forma solitaria frente a un monitor tratando de resolver 'bugs' de programación." }, "recomendaciones": ["Implementar dinámicas constantes de 'Programación en Parejas' (Pair Programming) para mitigar la frustración lógica.", "Incentivar pausas físicas activas cada 50 minutos de trabajo frente a pantallas para reducir fatiga ocular.", "Celebrar pequeños logros individuales en la estructuración lógica antes de calificar la sintaxis."], "canalizacion": [{ "institucion": "Orientación CETIS 49", "motivo": "Seguimiento psicopedagógico y vocacional", "maps": "CETIS+49" }, { "institucion": "Clínica DIF local", "motivo": "Apoyo emocional general externo", "maps": "DIF+Xochimilco" }], "videos": [{ "titulo": "Superar la Frustración de Programar", "url": "https://www.youtube.com/results?search_query=superar+frustracion+programacion" }, { "titulo": "Síndrome del Impostor en Tecnología", "url": "https://www.youtube.com/results?search_query=sindrome+del+impostor" }] },
+                    "4": { "total_grupo": 25, "sexo": { "Femenino": 6, "Masculino": 19 }, "gravedad": { "Sanos/Leves": 16, "Moderados": 6, "Graves": 3 }, "radar_clinico": [78, 70, 58, 80, 52], "diagnostico": { "sufren": "Fatiga digital crónica, inversión persistente de su ciclo del sueño (insomnio recurrente) y cefaleas tensionales.", "porque": "Derivado del sedentarismo severo y la mala práctica arraigada de programar o realizar entregas complejas durante altas horas de la madrugada, sumada a la saturación simultánea de proyectos prácticos de bases de datos y desarrollo." }, "recomendaciones": ["Dictar breves pláticas o infografías de higiene del sueño aplicada a estudiantes de tecnología.", "Fomentar el diseño de interfaces (bocetos) en papel sin pantallas durante la primera sesión de la materia.", "Supervisar la organización equilibrada de proyectos de desarrollo para evitar programar de madrugada."], "canalizacion": [{ "institucion": "SAPTEL Cruz Roja", "motivo": "Asistencia y contención de crisis (55 5259 8121)", "maps": "SAPTEL+Mexico" }, { "institucion": "Psicopedagogía del Plantel", "motivo": "Acompañamiento personal continuo", "maps": "CETIS+49" }], "videos": [{ "titulo": "Higiene de Sueño en Jóvenes", "url": "https://www.youtube.com/results?search_query=higiene+del+sueño" }, { "titulo": "Manejo de la Ansiedad de Pantalla", "url": "https://www.youtube.com/results?search_query=fatiga+digital+ansiedad" }] },
+                    "6": { "total_grupo": 18, "sexo": { "Femenino": 6, "Masculino": 12 }, "gravedad": { "Sanos/Leves": 11, "Moderados": 5, "Graves": 2 }, "radar_clinico": [85, 76, 60, 75, 42], "diagnostico": { "sufren": "Altos picos de ansiedad escolar por evaluación, cansancio mental prolongado y tensión muscular generalizada.", "porque": "Se origina por la asfixiante combinación de preparar exámenes de admisión universitaria para licenciaturas e ingenierías de alta competencia (IPN, UNAM, UAM) junto con el desarrollo contra reloj de su proyecto de titulación técnica." }, "recomendaciones": ["Asignar dinámicas de repaso colaborativo con miras a exámenes de ingreso universitario.", "Sustituir exámenes teóricos finales de código por la entrega de un portafolio web interactivo.", "Invitar a egresados universitarios a conversar sobre resiliencia en la educación superior."], "canalizacion": [{ "institucion": "Consejo Ciudadano", "motivo": "Atención psicológica remota gratis (55 5533 5533)", "maps": "Consejo+Ciudadano+CDMX" }, { "institucion": "Orientación CETIS 49", "motivo": "Tutoría de tránsito vocacional", "maps": "CETIS+49" }], "videos": [{ "titulo": "Ansiedad ante Exámenes de Admisión", "url": "https://www.youtube.com/results?search_query=ansiedad+ante+examenes" }, { "titulo": "Toma de Decisiones Vocacionales", "url": "https://www.youtube.com/results?search_query=orientacion+vocacional+jovenes" }] }
+                }
+            },
+            "Diseño gráfico": {
+                "total": 24,
+                "semestres": {
+                    "2": { "total_grupo": 15, "sexo": { "Femenino": 10, "Masculino": 5 }, "gravedad": { "Sanos/Leves": 11, "Moderados": 3, "Graves": 1 }, "radar_clinico": [72, 65, 48, 58, 35], "diagnostico": { "sufren": "Bloqueo mental o creativo de nivel ansioso, perfeccionismo autolimitante y miedo al escrutinio escolar.", "porque": "Provocado por el choque de adaptarse a la dura crítica constructiva pública habitual en las materias de diseño, combinado con un hábito de comparación virtual destructiva con perfiles de creadores en redes sociales." }, "recomendaciones": ["Promover el dibujo y bocetaje libre no sujeto a calificación para liberar el estrés inicial.", "Establecer pautas para retroalimentaciones constructivas de diseño fundamentadas en respeto mutuo.", "Integrar pausas de relajación de hombros, cuello y articulación de muñeca durante talleres de dibujo."], "canalizacion": [{ "institucion": "Atención INJUVE", "motivo": "Psicoterapia gratuita para adolescentes", "maps": "INJUVE+CDMX" }, { "institucion": "Orientación CETIS 49", "motivo": "Primer respondiente escolar", "maps": "CETIS+49" }], "videos": [{ "titulo": "Cómo Superar el Bloqueo Creativo", "url": "https://www.youtube.com/results?search_query=superar+bloqueo+creativo" }, { "titulo": "Lidiar con el Perfeccionismo Ansioso", "url": "https://www.youtube.com/results?search_query=perfeccionismo+salud+mental" }] },
+                    "6": { "total_grupo": 9, "sexo": { "Femenino": 5, "Masculino": 4 }, "gravedad": { "Sanos/Leves": 6, "Moderados": 2, "Graves": 1 }, "radar_clinico": [90, 80, 58, 85, 44], "diagnostico": { "sufren": "Altos picos de estrés agudo, fatiga visual severa, insomnio de conciliación y vulnerabilidad emocional.", "porque": "Se asocia a las largas noches de desvelo que demanda la maquetación fina del portafolio físico final, así como al estrés de carácter económico que implica costear impresiones de alta resolución y materiales para entregas profesionales." }, "recomendaciones": ["Fomentar el diseño de portafolios netamente digitales para disminuir gastos de impresión física.", "Sugerir compras grupales de consumibles para las maquetas o trabajos visuales de fin de curso.", "Enseñar estrategias de distribución del tiempo para contrarrestar el desvelo excesivo en proyectos terminales."], "canalizacion": [{ "institucion": "SAPTEL Cruz Roja", "motivo": "Apoyo de contención emocional telefónica", "maps": "SAPTEL+Mexico" }, { "institucion": "Dirección CETIS 49", "motivo": "Canalización con padres y tutores escolares", "maps": "CETIS+49" }], "videos": [{ "titulo": "Diseñar un Portafolio Digital Exitoso", "url": "https://www.youtube.com/results?search_query=portafolio+digital+diseno" }, { "titulo": "Sobrevivir a Entregas Críticas de Diseño", "url": "https://www.youtube.com/results?search_query=sobrevivir+entregas+diseno" }] }
+                }
+            },
+            "Medios de comunicación": {
+                "total": 22,
+                "semestres": {
+                    "2": { "total_grupo": 22, "sexo": { "Femenino": 11, "Masculino": 11 }, "gravedad": { "Sanos/Leves": 15, "Moderados": 5, "Graves": 2 }, "radar_clinico": [64, 82, 45, 55, 58], "diagnostico": { "sufren": "Elevada ansiedad de rendimiento social (miedo escénico), fobia a la evaluación del salón y aislamiento reactivo moderado.", "porque": "Gatillado por la exigencia escolar de exponerse constantemente de manera oratoria, actuar frente a cámaras de video profesionales o modular discursos orales en micrófonos, con el constante temor a cometer errores que se expongan al salón." }, "recomendaciones": ["Implementar ejercicios de expresión de manera progresiva (comenzando por audios privados y luego exposiciones grupales).", "Establecer pautas para evitar la filtración o burlas de fallos frente a cámaras de grabación escolares.", "Enseñar prácticas y rutinas de respiración diafragmática para modular la voz bajo situaciones de nerviosismo."], "canalizacion": [{ "institucion": "CISAME CDMX", "motivo": "Atención especializada de fobia social o pánico", "maps": "CISAME+CDMX" }, { "institucion": "Psicología CETIS 49", "motivo": "Acompañamiento escolar frente a miedo escénico", "maps": "CETIS+49" }], "videos": [{ "titulo": "Perder el Miedo a Hablar en Público", "url": "https://www.youtube.com/results?search_query=vencer+miedo+hablar+en+publico" }, { "titulo": "Modulación de Voz y Respiración", "url": "https://www.youtube.com/results?search_query=ejercicios+respiracion+oratoria" }] }
+                }
+            }
+        };
+
+        // Instancias de gráficas del portal docente
+        let docRadarChart = null, docBarChart = null, docPieChart = null;
+        let docCarreraActual = null, docSemestreActual = null;
+
+        function docSeleccionarCarrera(nombreCarrera) {
+            docCarreraActual = nombreCarrera;
+            docSemestreActual = null;
+            document.querySelectorAll('.doc-carrera-btn').forEach(btn => {
+                btn.classList.remove('border-guinda', 'bg-guinda', 'text-white', 'shadow-md');
+                btn.classList.add('border-gray-100', 'bg-white');
+            });
+            const btnActivo = document.getElementById(`doc-btn-${nombreCarrera.replace(/\s+/g, '-')}`);
+            if (btnActivo) {
+                btnActivo.classList.remove('border-gray-100', 'bg-white');
+                btnActivo.classList.add('border-guinda', 'bg-guinda', 'text-white', 'shadow-md');
+            }
+            document.getElementById('doc-label-carrera').textContent = nombreCarrera;
+            document.getElementById('doc-dashboard-graficas').classList.add('hidden');
+            const secSem = document.getElementById('doc-seccion-semestres');
+            secSem.classList.remove('hidden');
+
+            const cont = document.getElementById('doc-contenedor-semestres');
+            cont.innerHTML = '';
+            // Generar botones de semestre basados en datos reales + estáticos
+            const semestresReales = [...new Set(
+                respuestasReales
+                    .filter(r => normalizar(r["Carrera:"]) === normalizar(nombreCarrera))
+                    .map(r => r["Semestre:"].toString().replace(/[°oº\s]/g,'').trim())
+            )];
+            const semestresEstaticos = docBaseDatos[nombreCarrera] ? Object.keys(docBaseDatos[nombreCarrera].semestres) : [];
+            const todosSemestres = [...new Set([...semestresReales, ...semestresEstaticos])].sort();
+            
+            if (todosSemestres.length === 0) {
+                cont.innerHTML = '<p class="text-gray-400 text-sm col-span-3">Sin respuestas registradas aún para esta carrera.</p>';
+                return;
+            }
+            todosSemestres.forEach(sem => {
+                const totalReal = filtrarPorCarreraYSemestre(nombreCarrera, sem).length;
+                cont.insertAdjacentHTML('beforeend', `
+                    <button onclick="docCargarDashboard('${sem}')" class="px-5 py-4 rounded-2xl bg-white border-2 border-gray-200 text-gray-700 font-bold hover:border-guinda hover:bg-guinda/5 hover:text-guinda transition-all flex flex-col items-start shadow-sm">
+                        <span class="flex items-center text-sm"><i class="fa-solid fa-folder-open text-dorado mr-2"></i> ${sem}° Semestre</span>
+                        <span class="text-[11px] font-normal text-gray-400 mt-1">${totalReal} Respuestas reales</span>
+                    </button>`);
+            });
+        }
+
+        function docCargarDashboard(semestre) {
+            docSemestreActual = semestre;
+            // --- Datos REALES del Google Sheet ---
+            const registros = filtrarPorCarreraYSemestre(docCarreraActual, semestre);
+            const totalReal = registros.length;
+            const femReal = registros.filter(r => normalizar(r["Sexo:"]) === "femenino").length;
+            const mascReal = totalReal - femReal;
+
+            // --- Datos ESTÁTICOS para diagnóstico/recomendaciones/videos (contenido cualitativo) ---
+            const datosEstaticos = (docBaseDatos[docCarreraActual] && docBaseDatos[docCarreraActual].semestres[semestre])
+                ? docBaseDatos[docCarreraActual].semestres[semestre]
+                : null;
+
+            document.getElementById('doc-seccion-semestres').classList.add('hidden');
+            const dash = document.getElementById('doc-dashboard-graficas');
+            dash.classList.remove('hidden');
+
+            document.getElementById('doc-grupo-titulo').innerHTML = `${docCarreraActual} <span class="text-gray-300 font-light mx-2">|</span> <span class="text-dorado">${semestre}° Semestre</span>`;
+            document.getElementById('doc-kpi-muestra').innerText = `${totalReal} Respuestas`;
+            document.getElementById('doc-td-fem').innerText = `${femReal} alumnas`;
+            document.getElementById('doc-td-mas').innerText = `${mascReal} alumnos`;
+
+            // Diagnóstico cualitativo (estático)
+            if (datosEstaticos) {
+                document.getElementById('doc-diag-sufren').innerText = datosEstaticos.diagnostico.sufren;
+                document.getElementById('doc-diag-porque').innerText = datosEstaticos.diagnostico.porque;
+                document.getElementById('doc-td-leves').innerText = `${datosEstaticos.gravedad["Sanos/Leves"]} ref.`;
+                document.getElementById('doc-td-mod').innerText = `${datosEstaticos.gravedad.Moderados} ref.`;
+                document.getElementById('doc-td-graves').innerText = `${datosEstaticos.gravedad.Graves} ref.`;
+            } else {
+                document.getElementById('doc-diag-sufren').innerText = 'Sin diagnóstico cualitativo para este grupo aún.';
+                document.getElementById('doc-diag-porque').innerText = 'Los datos reflejan las respuestas reales recibidas.';
+                document.getElementById('doc-td-leves').innerText = '—';
+                document.getElementById('doc-td-mod').innerText = '—';
+                document.getElementById('doc-td-graves').innerText = '—';
+            }
+
+            if (docRadarChart) docRadarChart.destroy();
+            if (docBarChart) docBarChart.destroy();
+            if (docPieChart) docPieChart.destroy();
+
+            const colGuinda = '#7B1F3F', colDorado = '#C49A45', colGuindaA = 'rgba(123,31,63,0.4)';
+
+            // Gráfica radar: usa datos estáticos de referencia si existen
+            const radarData = datosEstaticos ? datosEstaticos.radar_clinico : [0,0,0,0,0];
+            docRadarChart = new Chart(document.getElementById('doc-radarChart').getContext('2d'), {
+                type: 'radar',
+                data: { labels: ['Estrés', 'Ansiedad', 'Depresión', 'Sueño', 'Aislamiento'], datasets: [{ label: 'Referencia (%)', data: radarData, backgroundColor: colGuindaA, borderColor: colGuinda, pointBackgroundColor: colDorado, pointBorderColor: '#fff', borderWidth: 2, fill: true }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { r: { ticks: { display: false }, min: 0, max: 100, grid: { color: 'rgba(0,0,0,0.05)' } } }, plugins: { legend: { display: false } } }
+            });
+
+            // Gráfica barras: distribución por semestre REAL de toda la carrera
+            const semestresCarrera = [...new Set(respuestasReales.filter(r => normalizar(r["Carrera:"]) === normalizar(docCarreraActual)).map(r => r["Semestre:"].toString().replace(/[°oº\s]/g,'').trim()))].sort();
+            const countsPorSem = semestresCarrera.map(s => filtrarPorCarreraYSemestre(docCarreraActual, s).length);
+            docBarChart = new Chart(document.getElementById('doc-barChart').getContext('2d'), {
+                type: 'bar',
+                data: { labels: semestresCarrera.map(s => s+'° Sem'), datasets: [{ label: 'Respuestas', data: countsPorSem, backgroundColor: semestresCarrera.map(s => s === semestre ? colGuinda : colDorado), borderRadius: 8, barPercentage: 0.6 }] },
+                options: { responsive: true, maintainAspectRatio: false, scales: { x: { grid: { display: false } }, y: { grid: { color: 'rgba(0,0,0,0.05)' }, beginAtZero: true, ticks: { stepSize: 1 } } }, plugins: { legend: { display: false } } }
+            });
+
+            // Gráfica dona: distribución REAL de sexo en este grupo
+            docPieChart = new Chart(document.getElementById('doc-pieChart').getContext('2d'), {
+                type: 'doughnut',
+                data: { labels: ['Femenino', 'Masculino'], datasets: [{ data: [femReal, mascReal], backgroundColor: [colDorado, '#5C172F'], hoverOffset: 4, borderWidth: 2, borderColor: '#fff' }] },
+                options: { responsive: true, maintainAspectRatio: false, cutout: '60%', plugins: { legend: { position: 'bottom', labels: { font: { size: 11, weight: 'bold' }, boxWidth: 12 } } } }
+            });
+
+            // Recomendaciones y canalización (estáticas)
+            const contRec = document.getElementById('doc-contenedor-recomendaciones');
+            contRec.innerHTML = '';
+            if (datosEstaticos) {
+                datosEstaticos.recomendaciones.forEach(rec => {
+                    contRec.insertAdjacentHTML('beforeend', `<li class="flex items-start bg-marfil/50 p-3 rounded-xl border border-gray-100 hover:border-dorado/30 transition-all"><i class="fa-solid fa-check text-dorado mt-1 mr-3 flex-shrink-0"></i><span>${rec}</span></li>`);
+                });
+            }
+
+            const contCan = document.getElementById('doc-contenedor-canalizacion');
+            contCan.innerHTML = '';
+            if (datosEstaticos) {
+                datosEstaticos.canalizacion.forEach(canal => {
+                    contCan.insertAdjacentHTML('beforeend', `<div class="bg-white p-4 rounded-xl border border-red-100 flex flex-col justify-between shadow-sm"><div><span class="text-[10px] font-bold text-red-700 uppercase tracking-wider block mb-1">Institución Recomendada</span><h4 class="font-bold text-gray-800 text-sm mb-1">${canal.institucion}</h4><p class="text-xs text-gray-500 mb-3">${canal.motivo}</p></div><a href="https://www.google.com/maps/search/?api=1&query=${canal.maps}" target="_blank" class="text-center bg-red-50 text-red-700 border border-red-200/50 hover:bg-red-700 hover:text-white text-xs font-bold py-2 px-3 rounded-xl transition-all flex items-center justify-center gap-1.5"><i class="fa-solid fa-location-dot"></i> Ver en Maps</a></div>`);
+                });
+            }
+
+            const contVid = document.getElementById('doc-contenedor-videos');
+            contVid.innerHTML = '';
+            if (datosEstaticos) {
+                datosEstaticos.videos.forEach(vid => {
+                    contVid.insertAdjacentHTML('beforeend', `<a href="${vid.url}" target="_blank" class="flex flex-col p-4 bg-gray-800 hover:bg-gray-700 border border-gray-700 hover:border-red-500/50 rounded-2xl group transition-all text-xs"><div class="flex items-center mb-2"><i class="fa-brands fa-youtube text-2xl text-red-500 group-hover:scale-110 transition-transform mr-3"></i><span class="font-bold text-gray-100 leading-tight">${vid.titulo}</span></div><span class="text-[10px] text-gray-400 group-hover:text-white mt-1 flex items-center">Ver recurso <i class="fa-solid fa-arrow-right ml-1 text-[8px]"></i></span></a>`);
+                });
+            }
+        }
+
+        function docRegresarSeleccion() {
+            document.getElementById('doc-dashboard-graficas').classList.add('hidden');
+            document.getElementById('doc-seccion-semestres').classList.remove('hidden');
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const userInp = document.getElementById('login-username').value.trim();
+            const passInp = document.getElementById('login-password').value.trim();
+            
+            if ((userInp === 'docente' || userInp === 'exposicion') && passInp === 'cetis49') {
+                isDocenteAuthenticated = true;
+                document.getElementById('login-error-msg').classList.add('hidden');
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('charts-container').classList.remove('hidden');
+                // Cargar datos reales y activar polling cada 60 segundos
+                cargarRespuestasReales();
+                if (intervaloActualizacion) clearInterval(intervaloActualizacion);
+                intervaloActualizacion = setInterval(cargarRespuestasReales, 60000);
+                
+            } else {
+                document.getElementById('login-error-msg').classList.remove('hidden');
+            }
+        }
+
+        function handleLogout() {
+            isDocenteAuthenticated = false;
+            if (intervaloActualizacion) { clearInterval(intervaloActualizacion); intervaloActualizacion = null; }
+            docCarreraActual = null; docSemestreActual = null;
+            document.getElementById('login-username').value = '';
+            document.getElementById('login-password').value = '';
+            document.getElementById('login-container').classList.remove('hidden');
+            document.getElementById('charts-container').classList.add('hidden');
+        }
+
+        // ====== CHECK IN EMOCIONAL ======
+        function setMood(mood, button) {
+            document.querySelectorAll('.mood-btn').forEach(btn => btn.classList.remove('border-dorado', 'bg-white'));
+            button.classList.add('border-dorado', 'bg-white');
+            const feedback = document.getElementById('mood-feedback');
+            feedback.classList.remove('hidden');
+            if(mood === 'Estresado' || mood === 'Triste') {
+                feedback.innerHTML = `Validamos tu sentir. Intenta usar la <strong>Caja de Calma</strong>.`;
+            } else {
+                feedback.innerHTML = `¡Qué excelente leer eso! Sigue cuidando de ti.`;
+            }
+        }
+
+        // ====== CAJA DE CALMA ======
+        let breathingInterval = null, isBreathing = false;
+        function toggleBreathing(btn) {
+            const circle = document.getElementById('breath-circle');
+            const instruction = document.getElementById('breath-instruction');
+            const timerText = document.getElementById('breath-timer');
+            
+            if (isBreathing) {
+                clearInterval(breathingInterval);
+                isBreathing = false;
+                btn.innerText = "Iniciar Guía";
+                circle.style.transition = "transform 0.5s ease-out";
+                circle.style.transform = "scale(1)";
+                instruction.innerText = "¿Listo para relajarte?";
+                timerText.innerText = "Presiona iniciar";
+                return;
+            }
+            
+            isBreathing = true;
+            btn.innerText = "Detener Guía";
+            let step = 0, counter = 4;
+            
+            instruction.innerText = "¡Inhala por la nariz!";
+            circle.style.transition = "transform 4s linear"; 
+            circle.style.transform = "scale(2.2)";
+            timerText.innerText = `${counter}s`;
+
+            breathingInterval = setInterval(() => {
+                counter--;
+                if(counter <= 0) {
+                    step = (step + 1) % 3;
+                    if(step === 0) { counter = 4; instruction.innerText = "¡Inhala por la nariz!"; circle.style.transition = "transform 4s linear"; circle.style.transform = "scale(2.2)"; } 
+                    else if(step === 1) { counter = 7; instruction.innerText = "Mantén el aire..."; } 
+                    else if(step === 2) { counter = 8; instruction.innerText = "Suelto despacio..."; circle.style.transition = "transform 8s linear"; circle.style.transform = "scale(1)"; }
+                }
+                timerText.innerText = `${counter}s`;
+            }, 1000);
+        }
+
+        // ====== GENERACIÓN DE CUESTIONARIO ======
+        const questions = [
+            "1. Me he sentido emocionalmente cansado(a) o agotado(a) por mis tareas escolares.",
+            "2. Me cuesta concentrarme cuando estoy en los salones de clases.",
+            "3. He tenido periodos de desánimo, tristeza profunda o falta de motivación.",
+            "4. Siento una preocupación muy alta o nervios por cosas comunes del día.",
+            "5. He tenido dolores de cabeza, problemas de estómago o tensión muscular sin razón médica.",
+            "6. Mis horas de sueño se han visto afectadas (insomnio o dormir demasiado).",
+            "7. Siento ganas de llorar o irritabilidad extrema frente a problemas pequeños.",
+            "8. He sentido soledad o aislamiento aun estando rodeado(a) de compañeros.",
+            "9. He perdido interés en hacer cosas que antes me divertían muchísimo.",
+            "10. Siento mucha presión por mi futuro, mis calificaciones o lo que esperan de mí."
+        ];
+
+        const likertOptions = [
+            { value: 1, label: "Nunca" },
+            { value: 2, label: "Casi nunca" },
+            { value: 3, label: "A veces" },
+            { value: 4, label: "Casi siempre" },
+            { value: 5, label: "Siempre" }
+        ];
+
+        const likertContainer = document.getElementById('likert-questions');
+
+        questions.forEach((q, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.className = "bg-marfil/40 p-4 rounded-2xl border border-gray-100";
+            questionDiv.innerHTML = `<p class="font-medium text-gray-800 text-sm mb-4">${q} <span class="text-red-500">*</span></p>`;
+            const optionsDiv = document.createElement('div');
+            optionsDiv.className = "flex flex-col sm:flex-row sm:justify-between gap-2 sm:gap-0";
+            likertOptions.forEach(opt => {
+                const label = document.createElement('label');
+                label.className = "flex items-center sm:flex-col cursor-pointer p-2 rounded-xl hover:bg-white transition-all";
+                label.innerHTML = `<input type="radio" name="q${index}" value="${opt.value}" required class="w-4 h-4 sm:mb-2 mr-3 sm:mr-0 accent-guinda">
+                                   <span class="text-xs text-gray-500 text-center"><span class="sm:hidden font-bold mr-1">${opt.value} -</span>${opt.label}</span>`;
+                optionsDiv.appendChild(label);
+            });
+            questionDiv.appendChild(optionsDiv);
+            likertContainer.appendChild(questionDiv);
+        });
+
+        // ====== ENVÍO Y CONEXIÓN DE FORMULARIO A GRÁFICAS ======
+        function submitForm(e) {
+            e.preventDefault(); 
+            
+            const edadInp = parseInt(document.getElementById('input-edad').value);
+            const sexoInp = document.getElementById('input-sexo').value;
+            const semestreInp = document.getElementById('input-semestre').value;
+            const carreraInp = document.getElementById('input-carrera').value;
+
+            let totalScore = 0;
+            for(let i=0; i<10; i++) {
+                const checkedOption = document.querySelector(`input[name="q${i}"]:checked`);
+                if(checkedOption) totalScore += parseInt(checkedOption.value);
+            }
+
+            // Registrar en base de datos local simulada en tiempo real
+            baseDeDatosEstudiantes.push({
+                edad: edadInp,
+                sexo: sexoInp,
+                semestre: semestreInp,
+                carrera: carreraInp,
+                score: totalScore
+            });
+
+            // Actualizar dashboard inmediatamente si la sesión de docentes estuviera activa de fondo
+            
+
+            let diagnosticHtml = '', ytQuery = '';
+
+            if (totalScore <= 20) {
+                ytQuery = "habitos+para+mantener+buena+salud+mental+adolescentes";
+                diagnosticHtml = `
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-green-200">
+                            <i class="fa-solid fa-leaf text-2xl text-green-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif font-bold text-gray-800 mb-2">Puntuación: ${totalScore}/50 - Bienestar General</h3>
+                        <p class="text-sm text-gray-600 mb-4 bg-marfil p-4 rounded-xl border border-gray-100">Según tus respuestas, pareces estar manejando bastante bien el estrés escolar de forma sana.</p>
+                    </div>`;
+            } else if (totalScore <= 35) {
+                ytQuery = "tecnicas+estudio+sin+estres+y+relajacion";
+                diagnosticHtml = `
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-yellow-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-yellow-200">
+                            <i class="fa-solid fa-battery-half text-2xl text-yellow-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif font-bold text-gray-800 mb-2">Puntuación: ${totalScore}/50 - Sobrecarga Moderada</h3>
+                        <p class="text-sm text-gray-600 mb-4 bg-marfil p-4 rounded-xl border border-gray-100">El cansancio mental te está pesando un poco. Es normal sentir estrés, pero vigílalo de cerca.</p>
+                    </div>`;
+            } else {
+                ytQuery = "que+hacer+cuando+tengo+ansiedad+o+depresion+adolescentes";
+                diagnosticHtml = `
+                    <div class="text-center mb-6">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-200">
+                            <i class="fa-solid fa-triangle-exclamation text-2xl text-red-600"></i>
+                        </div>
+                        <h3 class="text-2xl font-serif font-bold text-gray-800 mb-2">Puntuación: ${totalScore}/50 - Alerta de Agotamiento</h3>
+                        <p class="text-sm text-gray-600 mb-4 bg-marfil p-4 rounded-xl border border-gray-100">Tus respuestas indican un nivel de ansiedad alto o agotamiento extremo. <strong>Te recomendamos buscar apoyo.</strong></p>
+                    </div>`;
+            }
+
+            const finalHtml = `
+                <div class="max-w-2xl mx-auto">
+                    <div class="text-center mb-4"><span class="text-[10px] uppercase tracking-wider text-dorado font-bold bg-dorado/10 px-3 py-1 rounded-full"><i class="fa-solid fa-check"></i> Datos Registrados Exitosamente</span></div>
+                    ${diagnosticHtml}
+                    <div class="mt-6 text-center">
+                        <a href="https://www.youtube.com/results?search_query=${ytQuery}" target="_blank" class="inline-block bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-xl shadow-md transition-all text-sm mb-4">
+                            <i class="fa-brands fa-youtube mr-2"></i> Ver videos recomendados
+                        </a>
+                    </div>
+                    <div class="text-center mt-6">
+                        <button onclick="resetForm()" class="text-guinda font-bold text-xs uppercase underline">Realizar otra prueba</button>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('saludMentalForm').style.display = 'none';
+            const resultBox = document.getElementById('dynamic-result');
+            resultBox.innerHTML = finalHtml;
+            resultBox.classList.remove('hidden');
+            document.getElementById('cuestionario').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('saludMentalForm').reset();
+            document.getElementById('saludMentalForm').style.display = 'block';
+            document.getElementById('dynamic-result').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
