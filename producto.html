@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalles del servicio | Servicios Digitales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ["Inter", "sans-serif"] } } } };</script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800">
+    <header class="border-b border-slate-200 bg-white">
+        <nav class="mx-auto flex max-w-5xl items-center justify-between px-5 py-4">
+            <a href="servicios_digitales_premium.html" class="font-bold text-slate-900">← Catálogo</a>
+            <a data-whatsapp-link data-message="Hola, quiero información sobre un servicio." href="#" class="font-semibold text-green-700">WhatsApp</a>
+        </nav>
+    </header>
+    <main class="mx-auto max-w-5xl px-5 py-10">
+        <p id="product-error" class="hidden rounded-xl bg-amber-50 p-5 text-amber-900" role="status"></p>
+        <article id="product-detail" class="hidden overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm">
+            <div class="grid md:grid-cols-2">
+                <div id="product-image-area" class="flex min-h-72 items-center justify-center bg-slate-50 p-8">
+                    <img id="product-image" class="max-h-80 max-w-full object-contain" alt="">
+                    <i id="product-icon" class="fa-solid hidden rounded-3xl bg-indigo-100 p-8 text-5xl text-indigo-700" aria-hidden="true"></i>
+                </div>
+                <div class="p-7 md:p-10">
+                    <span id="product-origin" class="rounded-full bg-indigo-50 px-3 py-1 text-sm font-semibold text-indigo-800"></span>
+                    <h1 id="product-name" class="mt-5 text-3xl font-bold text-slate-900 md:text-4xl"></h1>
+                    <p id="product-description" class="mt-4 text-lg leading-relaxed text-slate-600"></p>
+                    <p id="product-price" class="mt-6 text-xl font-bold text-indigo-800"></p>
+                    <p id="product-availability" class="mt-3 font-semibold"></p>
+                    <div class="mt-7 flex flex-wrap gap-3">
+                        <button id="add-product" type="button" class="rounded-lg bg-indigo-700 px-5 py-3 font-semibold text-white hover:bg-indigo-800">Agregar al carrito</button>
+                        <a id="product-contact" data-whatsapp-link data-message="Hola, quiero contratar un servicio." href="#" class="rounded-lg bg-green-600 px-5 py-3 font-semibold text-white hover:bg-green-700">Consultar por WhatsApp</a>
+                    </div>
+                    <p id="cart-message" class="hidden mt-4 text-sm text-green-800" role="status"></p>
+                </div>
+            </div>
+            <section class="border-t border-slate-200 p-7 md:p-10">
+                <h2 class="text-xl font-bold">Más información</h2>
+                <p id="product-details" class="mt-3 leading-relaxed text-slate-700"></p>
+                <div id="esim-tools" class="hidden mt-8 rounded-2xl bg-indigo-50 p-6">
+                    <h2 class="text-xl font-bold text-indigo-950">Comprueba tu dispositivo eSIM</h2>
+                    <p class="mt-2 text-sm leading-relaxed text-slate-700">Busca la marca y el modelo exacto. La compatibilidad depende de la variante regional, operador y bloqueo de red; confirma en los ajustes del teléfono y con su fabricante antes de comprar. Este buscador es solo orientativo.</p>
+                    <form id="esim-form" class="mt-4 flex flex-col gap-3 sm:flex-row">
+                        <label for="esim-device" class="sr-only">Marca y modelo del dispositivo</label>
+                        <input id="esim-device" required maxlength="100" class="min-w-0 flex-1 rounded-lg border border-slate-300 bg-white px-4 py-3" placeholder="Ej. iPhone 15, Samsung Galaxy S23, Pixel 8">
+                        <button class="rounded-lg bg-indigo-700 px-5 py-3 font-semibold text-white" type="submit">Buscar compatibilidad</button>
+                    </form>
+                    <p id="esim-result" class="mt-4 hidden rounded-lg bg-white p-4 text-sm" role="status"></p>
+                    <details class="mt-5 text-sm text-slate-700">
+                        <summary class="cursor-pointer font-semibold">Modelos de referencia incluidos</summary>
+                        <p class="mt-2">iPhone XS, XR y posteriores; Samsung Galaxy S20/S21/S22/S23/S24/S25, Z Flip3 o posterior y Z Fold3 o posterior; Google Pixel 4 o posterior. Puede variar por país y variante. iPhone 14 o posterior vendido en EE. UU. puede ser solo eSIM.</p>
+                    </details>
+                    <p class="mt-4 text-sm leading-relaxed text-slate-600">La eSIM es digital y necesita conexión para instalarse, un dispositivo compatible y normalmente desbloqueado. Revisa países cubiertos, vigencia, activación y política de uso justo; los datos “ilimitados” pueden estar sujetos a reducción de velocidad u otras condiciones del proveedor. La eSIM no necesariamente incluye número para llamadas/SMS.</p>
+                </div>
+            </section>
+        </article>
+    </main>
+    <footer class="mt-12 border-t border-slate-200 bg-white px-5 py-8 text-center text-sm text-slate-500">
+        Precios y disponibilidad sujetos a confirmación. La beta no procesa pagos.
+    </footer>
+    <script src="backend-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catalog-data.js"></script>
+    <script src="site.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", async () => {
+            const error = document.getElementById("product-error");
+            try {
+            await CatalogStore.initialize();
+            const id = new URLSearchParams(location.search).get("id");
+            const product = CatalogStore.read().services.find(service => service.id === id);
+            if (!product) {
+                error.textContent = "No encontramos ese servicio. Vuelve al catálogo para ver las opciones disponibles.";
+                error.classList.remove("hidden");
+                return;
+            }
+            document.title = `${product.name} | Servicios Digitales`;
+            document.getElementById("product-detail").classList.remove("hidden");
+            document.getElementById("product-origin").textContent = product.original ? "Producto original" : "Se obtiene o instala “con magia”";
+            document.getElementById("product-name").textContent = product.name;
+            document.getElementById("product-description").textContent = product.description;
+            document.getElementById("product-details").textContent = product.details || product.description;
+            document.getElementById("product-price").textContent = CatalogStore.formatPrice(product.price);
+            const availability = document.getElementById("product-availability");
+            availability.textContent = product.available ? "Disponible para consultar" : "Agotado temporalmente";
+            availability.className = `mt-3 font-semibold ${product.available ? "text-green-700" : "text-amber-800"}`;
+            const image = document.getElementById("product-image");
+            const icon = document.getElementById("product-icon");
+            if (product.image) {
+                image.src = product.image;
+                image.alt = product.name;
+                image.onerror = () => { image.classList.add("hidden"); icon.classList.remove("hidden"); icon.classList.add(product.icon); };
+            } else {
+                image.classList.add("hidden");
+                icon.classList.remove("hidden");
+                icon.classList.add(product.icon);
+            }
+            const addButton = document.getElementById("add-product");
+            addButton.dataset.addToCart = product.id;
+            addButton.disabled = !product.available;
+            if (!product.available) {
+                addButton.textContent = "Agotado temporalmente";
+                addButton.classList.add("cursor-not-allowed", "opacity-50");
+            }
+            const contact = document.getElementById("product-contact");
+            contact.dataset.message = `Hola, quiero información/contratar ${product.name}. ¿Me confirman precio, disponibilidad y condiciones?`;
+            contact.href = `https://wa.me/${CatalogStore.read().whatsapp.replace(/\D/g, "")}?text=${encodeURIComponent(contact.dataset.message)}`;
+            if (product.id === "esim-datos-ilimitados") document.getElementById("esim-tools").classList.remove("hidden");
+            } catch (exception) {
+                error.textContent = `No se pudo cargar el servicio: ${exception.message}`;
+                error.classList.remove("hidden");
+            }
+        });
+
+        document.getElementById("esim-form").addEventListener("submit", event => {
+            event.preventDefault();
+            const query = document.getElementById("esim-device").value.trim().toLowerCase();
+            const result = document.getElementById("esim-result");
+            const families = [
+                { name: "Apple iPhone", regex: /iphone\s*(xs\s*max|xs|xr|1[1-9]|se\s*(?:2|3|2020|2022))/i },
+                { name: "Samsung Galaxy S", regex: /galaxy\s*s\s*(2[0-9]|[3-9]\d)|(?:^|\s)s\s*(2[0-9]|[3-9]\d)/i },
+                { name: "Samsung Galaxy Z Flip/Fold", regex: /(?:galaxy\s*)?z\s*(?:flip|fold)\s*[3-9]/i },
+                { name: "Google Pixel", regex: /pixel\s*([4-9]|[1-9]\d)/i }
+            ];
+            const match = families.find(family => family.regex.test(query));
+            result.textContent = match
+                ? `El modelo coincide con una familia ${match.name} incluida en nuestra lista orientativa. No podemos confirmar la variante exacta ni el bloqueo de red; revisa Ajustes > Datos móviles > Añadir eSIM y confirma con el fabricante/proveedor.`
+                : "No pudimos confirmar ese modelo en nuestra lista breve. Esto no significa que sea incompatible: consulta las especificaciones del modelo exacto con el fabricante y revisa si aparece “Añadir eSIM” en los ajustes.";
+            result.classList.remove("hidden");
+        });
+    </script>
+</body>
+</html>
