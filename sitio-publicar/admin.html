@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administración | Servicios Digitales</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>tailwind.config = { theme: { extend: { fontFamily: { sans: ["Inter", "sans-serif"] } } } };</script>
+</head>
+<body class="min-h-screen bg-slate-50 font-sans text-slate-800">
+    <header class="border-b border-slate-200 bg-white">
+        <div class="mx-auto flex max-w-5xl flex-wrap items-center justify-between gap-4 px-5 py-6">
+            <div><p class="text-sm font-semibold uppercase tracking-wide text-indigo-600">Administración</p><h1 class="text-2xl font-bold text-slate-900">Administrar catálogo</h1></div>
+            <a href="servicios_digitales_premium.html" class="font-medium text-indigo-700 hover:underline">Ver página pública →</a>
+        </div>
+    </header>
+    <section id="admin-login" class="mx-auto mt-8 max-w-lg rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 class="text-xl font-bold text-slate-900">Iniciar sesión</h2>
+        <p id="login-notice" class="mt-2 text-sm text-slate-600">Solo la cuenta administradora puede cambiar el catálogo.</p>
+        <form id="login-form" class="mt-5 space-y-4">
+            <label class="block text-sm font-medium">Correo
+                <input name="email" type="email" autocomplete="username" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-3">
+            </label>
+            <label class="block text-sm font-medium">Contraseña
+                <input name="password" type="password" autocomplete="current-password" required class="mt-1 w-full rounded-lg border border-slate-300 px-4 py-3">
+            </label>
+            <button type="submit" class="w-full rounded-lg bg-indigo-700 px-5 py-3 font-semibold text-white hover:bg-indigo-800">Entrar</button>
+        </form>
+        <p id="login-status" class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="alert"></p>
+    </section>
+    <main id="admin-content" class="mx-auto hidden max-w-5xl space-y-8 px-5 py-8">
+        <section class="rounded-2xl border border-amber-300 bg-amber-50 p-5 text-amber-950" role="status">
+            <h2 class="font-bold">Importante sobre esta beta</h2>
+            <p class="mt-1 text-sm">Los cambios se guardan en la base compartida y son visibles para los visitantes. Esta beta todavía no procesa pagos.</p>
+        </section>
+        <div class="flex justify-end">
+            <button id="sign-out" type="button" class="rounded-lg border border-slate-300 px-4 py-2 text-sm font-semibold hover:bg-slate-100">Cerrar sesión</button>
+        </div>
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-900">Contacto por WhatsApp</h2>
+            <form id="settings-form" class="mt-4 flex flex-col gap-3 sm:flex-row">
+                <label for="whatsapp" class="sr-only">Número de WhatsApp con código de país</label>
+                <input id="whatsapp" name="whatsapp" type="tel" inputmode="tel" required placeholder="5215531318466" class="min-w-0 flex-1 rounded-lg border border-slate-300 px-4 py-3">
+                <button class="rounded-lg bg-slate-900 px-5 py-3 font-semibold text-white hover:bg-slate-700" type="submit">Guardar contacto</button>
+            </form>
+        </section>
+        <section class="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+                <div><h2 class="text-lg font-bold text-slate-900">Servicios</h2><p class="text-sm text-slate-600">Edita ficha, precio y disponibilidad temporal.</p></div>
+                <button id="add-service" type="button" class="rounded-lg bg-indigo-700 px-5 py-3 font-semibold text-white hover:bg-indigo-800">Agregar servicio</button>
+            </div>
+            <p id="status-message" class="mt-4 hidden rounded-lg px-4 py-3 text-sm" role="status"></p>
+            <div id="service-list" class="mt-5 space-y-4"></div>
+        </section>
+    </main>
+    <template id="service-template">
+        <form class="service-form rounded-xl border border-slate-200 p-5">
+            <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+                <h3 class="service-heading text-lg font-bold"></h3>
+                <label class="flex items-center gap-2 text-sm font-semibold">
+                    <input name="available" type="checkbox" class="h-4 w-4 accent-indigo-700">
+                    Disponible (desmarca para “Agotado temporalmente”)
+                </label>
+            </div>
+            <div class="grid gap-4 sm:grid-cols-2">
+                <label class="text-sm font-medium">Nombre
+                    <input name="name" required maxlength="80" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                </label>
+                <label class="text-sm font-medium">Precio MXN (opcional)
+                    <input name="price" type="number" min="0" step="0.01" placeholder="Vacío = cotizar" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                </label>
+                <label class="text-sm font-medium sm:col-span-2">Descripción corta
+                    <textarea name="description" required maxlength="500" rows="2" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"></textarea>
+                </label>
+                <label class="text-sm font-medium sm:col-span-2">Información de la ficha del servicio
+                    <textarea name="details" required maxlength="1500" rows="3" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2"></textarea>
+                </label>
+                <label class="text-sm font-medium sm:col-span-2">Ruta de imagen (opcional)
+                    <input name="image" maxlength="300" placeholder="Ej. producto.png" class="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2">
+                </label>
+                <p class="text-xs text-slate-500 sm:col-span-2">La identificación de originales es fija: Netflix, Canva, Duolingo, YouTube Premium y eSIM.</p>
+            </div>
+            <div class="mt-4 flex flex-wrap gap-3">
+                <button type="submit" class="rounded-lg bg-indigo-700 px-4 py-2 font-semibold text-white hover:bg-indigo-800">Guardar cambios</button>
+                <button type="button" data-action="delete" class="rounded-lg border border-red-300 px-4 py-2 font-semibold text-red-700 hover:bg-red-50">Eliminar</button>
+            </div>
+        </form>
+    </template>
+    <script src="backend-config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="catalog-data.js"></script>
+    <script>
+        const list = document.getElementById("service-list");
+        function status(message, isError) {
+            const element = document.getElementById("status-message");
+            element.textContent = message;
+            element.className = `mt-4 rounded-lg px-4 py-3 text-sm ${isError ? "bg-red-50 text-red-800" : "bg-green-50 text-green-800"}`;
+        }
+        function loginStatus(message, isError) {
+            const element = document.getElementById("login-status");
+            element.textContent = message;
+            element.className = `mt-4 rounded-lg px-4 py-3 text-sm ${isError ? "bg-red-50 text-red-800" : "bg-green-50 text-green-800"}`;
+        }
+        function showAdmin() {
+            document.getElementById("admin-login").classList.add("hidden");
+            document.getElementById("admin-content").classList.remove("hidden");
+        }
+        function render() {
+            const data = CatalogStore.read();
+            document.getElementById("whatsapp").value = data.whatsapp;
+            list.replaceChildren();
+            data.services.forEach(service => {
+                const form = document.getElementById("service-template").content.firstElementChild.cloneNode(true);
+                form.dataset.id = service.id;
+                form.querySelector(".service-heading").textContent = service.name || "Servicio nuevo";
+                form.elements.name.value = service.name;
+                form.elements.description.value = service.description;
+                form.elements.details.value = service.details || service.description;
+                form.elements.price.value = Number.isFinite(service.price) ? service.price : "";
+                form.elements.image.value = service.image || "";
+                form.elements.available.checked = service.available;
+                list.append(form);
+            });
+        }
+        async function saveForm(form) {
+            const data = CatalogStore.read();
+            const service = data.services.find(item => item.id === form.dataset.id);
+            if (!service) throw new Error("No se encontró el servicio.");
+            const priceValue = form.elements.price.value;
+            const price = priceValue === "" ? null : Number(priceValue);
+            const name = form.elements.name.value.trim();
+            const description = form.elements.description.value.trim();
+            const details = form.elements.details.value.trim();
+            if (!name || !description || !details || (price !== null && (!Number.isFinite(price) || price < 0))) {
+                throw new Error("Revisa el nombre, las descripciones y el precio.");
+            }
+            Object.assign(service, {
+                name,
+                description,
+                details,
+                price,
+                image: form.elements.image.value.trim(),
+                available: form.elements.available.checked
+            });
+            await CatalogStore.save(data);
+        }
+        document.getElementById("settings-form").addEventListener("submit", async event => {
+            event.preventDefault();
+            try {
+                const data = CatalogStore.read();
+                const phone = document.getElementById("whatsapp").value.trim();
+                if (!/^\+?[0-9 ()-]{8,20}$/.test(phone)) throw new Error("Escribe un número válido con código de país.");
+                data.whatsapp = phone;
+                await CatalogStore.save(data);
+                status("Contacto guardado y publicado.", false);
+            } catch (error) { status(`No se pudo guardar el contacto: ${error.message}`, true); }
+        });
+        document.getElementById("add-service").addEventListener("click", async () => {
+            try {
+                const data = CatalogStore.read();
+                data.services.push({
+                    id: crypto.randomUUID(), name: "", description: "", details: "",
+                    price: null, icon: "fa-star", color: "blue", image: "",
+                    original: false, available: true
+                });
+                await CatalogStore.save(data);
+                render();
+                list.lastElementChild.elements.name.focus();
+            } catch (error) { status(`No se pudo agregar el servicio: ${error.message}`, true); }
+        });
+        list.addEventListener("submit", async event => {
+            if (!event.target.matches(".service-form")) return;
+            event.preventDefault();
+            try {
+                await saveForm(event.target);
+                status("Cambios guardados y publicados para todos los visitantes.", false);
+                render();
+            } catch (error) { status(`No se pudo guardar: ${error.message}`, true); }
+        });
+        list.addEventListener("click", async event => {
+            const button = event.target.closest('[data-action="delete"]');
+            if (!button) return;
+            const form = button.closest(".service-form");
+            if (!window.confirm("¿Eliminar este servicio del catálogo?")) return;
+            try {
+                const data = CatalogStore.read();
+                data.services = data.services.filter(service => service.id !== form.dataset.id);
+                await CatalogStore.save(data);
+                render();
+                status("Servicio eliminado.", false);
+            } catch (error) { status(`No se pudo eliminar: ${error.message}`, true); }
+        });
+        document.getElementById("login-form").addEventListener("submit", async event => {
+            event.preventDefault();
+            const form = event.currentTarget;
+            try {
+                await CatalogStore.signIn(form.elements.email.value.trim(), form.elements.password.value);
+                showAdmin();
+                render();
+                status("Sesión iniciada.", false);
+                form.reset();
+            } catch (error) { loginStatus(error.message, true); }
+        });
+        document.getElementById("sign-out").addEventListener("click", async () => {
+            try {
+                await CatalogStore.signOut();
+                document.getElementById("admin-content").classList.add("hidden");
+                document.getElementById("admin-login").classList.remove("hidden");
+                loginStatus("Sesión cerrada.", false);
+            } catch (error) { status(`No se pudo cerrar sesión: ${error.message}`, true); }
+        });
+        async function initializeAdmin() {
+            if (!CatalogStore.configured()) {
+                document.getElementById("login-form").classList.add("hidden");
+                loginStatus("Falta conectar Supabase. Configura backend-config.js y ejecuta supabase-schema.sql antes de publicar el panel.", true);
+                return;
+            }
+            try {
+                await CatalogStore.initialize();
+                if (await CatalogStore.adminSession()) {
+                    showAdmin();
+                    render();
+                }
+            } catch (error) { loginStatus(`No se pudo preparar el inicio de sesión: ${error.message}`, true); }
+        }
+        initializeAdmin();
+    </script>
+</body>
+</html>
